@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wba.EfCore.StudentApp.Web", "Wba.EfCore.StudentApp.Web\Wba.EfCore.StudentApp.Web.csproj", "{0705A5AB-A589-490C-B9B4-0C1557BBC309}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wba.EfCore.StudentApp.Domain", "Wba.EfCore.StudentApp.Domain\Wba.EfCore.StudentApp.Domain.csproj", "{93F20441-F252-4EE0-B63B-BC7DB52339C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0705A5AB-A589-490C-B9B4-0C1557BBC309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0705A5AB-A589-490C-B9B4-0C1557BBC309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0705A5AB-A589-490C-B9B4-0C1557BBC309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0705A5AB-A589-490C-B9B4-0C1557BBC309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93F20441-F252-4EE0-B63B-BC7DB52339C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93F20441-F252-4EE0-B63B-BC7DB52339C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93F20441-F252-4EE0-B63B-BC7DB52339C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93F20441-F252-4EE0-B63B-BC7DB52339C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D5CBB5F-BFD4-4CF6-93EF-02FD6BF5C8A5}
+	EndGlobalSection
+EndGlobal
