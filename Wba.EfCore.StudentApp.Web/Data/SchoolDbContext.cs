@@ -13,6 +13,7 @@ namespace Wba.EfCore.StudentApp.Web.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentCourses> StudentCourses { get; set; }
         public SchoolDbContext
             (DbContextOptions<SchoolDbContext> options)
             :base(options)
@@ -22,7 +23,23 @@ namespace Wba.EfCore.StudentApp.Web.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            //gecombineerde sleutel definiëren
+            modelBuilder.Entity<StudentCourses>()
+                .HasKey(sc => new { sc.CourseId, sc.StudentId });
+            //1 op veel configuratie met fluent API
+            modelBuilder.Entity<Teacher>()
+                .HasMany(t => t.Courses)
+                .WithOne(c => c.Teacher)
+                .HasForeignKey(c => c.TeacherId);
+            //veel op veel met fluent API kan ook
+            modelBuilder.Entity<StudentCourses>()
+                .HasOne(sc => sc.Student)
+                .WithMany(s => s.Courses)
+                .HasForeignKey(sc => sc.StudentId);
+            modelBuilder.Entity<StudentCourses>()
+                .HasOne(sc => sc.Course)
+                .WithMany(c => c.Students)
+                .HasForeignKey(sc => sc.CourseId);
         }
     }
 }

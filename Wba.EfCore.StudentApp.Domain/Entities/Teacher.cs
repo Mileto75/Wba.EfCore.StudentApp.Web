@@ -18,6 +18,6 @@ namespace Wba.EfCore.StudentApp.Domain.Entities
         public string Lastname { get; set; }
         public string Address { get; set; }
         //1 teacher heeft meerdere Courses
-        public Collection<Course> Courses { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }
