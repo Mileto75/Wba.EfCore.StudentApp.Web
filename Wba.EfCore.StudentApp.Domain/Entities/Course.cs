@@ -12,8 +12,8 @@ namespace Wba.EfCore.StudentApp.Domain.Entities
         public long Id { get; set; }
         public string Title { get; set; }
         //navigation property
-        public Teacher Teacher { get; set; }
-        public long? TeacherId{ get; set; }//foreign key
+        public Teacher Teacher { get; set; }//navigation property
+        public long? TeacherId{ get; set; }//foreign key(niet verplicht by convention)
         public ICollection<StudentCourses> Students { get; set; }
     }
 }

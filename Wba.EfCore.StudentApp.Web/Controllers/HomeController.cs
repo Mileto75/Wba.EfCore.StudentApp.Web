@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Wba.EfCore.StudentApp.Web.Data;
 using Wba.EfCore.StudentApp.Web.Models;
 
 namespace Wba.EfCore.StudentApp.Web.Controllers
@@ -12,7 +13,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+           return View();
         }
 
         public IActionResult About()

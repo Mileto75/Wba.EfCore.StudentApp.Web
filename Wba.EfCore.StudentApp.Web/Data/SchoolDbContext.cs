@@ -10,6 +10,7 @@ namespace Wba.EfCore.StudentApp.Web.Data
     public class SchoolDbContext : DbContext
     {
         //dbsets stellen onze tabellen voor
+        //DbSet props = Repositories
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -40,6 +41,9 @@ namespace Wba.EfCore.StudentApp.Web.Data
                 .HasOne(sc => sc.Course)
                 .WithMany(c => c.Students)
                 .HasForeignKey(sc => sc.CourseId);
+            //call the seeding static method
+            //to add data to database
+            DataSeeder.Seed(modelBuilder);
         }
     }
 }
