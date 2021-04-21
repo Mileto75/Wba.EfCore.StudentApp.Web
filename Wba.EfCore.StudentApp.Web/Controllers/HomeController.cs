@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,9 +12,33 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
 {
     public class HomeController : Controller
     {
+        //dependency injection: declaration
+        private readonly SchoolDbContext _schoolDbContext;
+        //constructor injection
+        public HomeController(SchoolDbContext schoolDbContext)
+        {
+            //injection
+            _schoolDbContext = schoolDbContext;
+        }
+
         public IActionResult Index()
         {
-           return View();
+            var courses = _schoolDbContext
+                .Courses
+                .Include(c => c.Teacher)//join de tabel teacher
+                .Include(c => c.Students)//join table studentCourses
+                .ThenInclude(s => s.Student)//join tabel students
+                .ToList();
+            foreach(var course in courses)
+            {
+                Console.WriteLine(course.Title);
+                foreach(var student in course.Students)
+                {
+                    Console.WriteLine($"{student.Student.Firstname}" +
+                        $" {student.Student.Lastname}");
+                }
+            }
+            return View();
         }
 
         public IActionResult About()

@@ -33,7 +33,7 @@ namespace Wba.EfCore.StudentApp.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //dependency service configuration of databasecontext
+            //dependency service configuration/registration of databasecontext
             services.AddDbContext<SchoolDbContext>
                 (options 
                 => options.UseSqlServer(Configuration.GetConnectionString("SChoolDb")));
