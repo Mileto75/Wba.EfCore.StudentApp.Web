@@ -12,7 +12,7 @@
     <label asp-for="TeacherId"></label>
     <select asp-for="TeacherId" class="form-control"
             asp-items="@Model.Teachers"></select>
-    <input type="hidden" value="@Model.CourseId" />
+    <input type="hidden" asp-for="@Model.CourseId" value="@Model.CourseId" />
     <button type="submit" class="btn btn-info">Save</button>
 </form>
 

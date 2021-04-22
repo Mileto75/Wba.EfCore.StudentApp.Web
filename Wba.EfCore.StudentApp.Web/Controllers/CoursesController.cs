@@ -96,6 +96,51 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public IActionResult Update(CoursesAddUpdateCourseViewModel
+            coursesAddUpdateCourseViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                //fill the teachers
+                coursesAddUpdateCourseViewModel
+                .Teachers = new List<SelectListItem>();
+                foreach (var teacher in _schoolDbContext.Teachers.ToList())
+                {
+                    coursesAddUpdateCourseViewModel
+                        .Teachers.Add(new SelectListItem
+                        {
+                            Text = $"{teacher.Firstname} {teacher.Lastname}"
+                        ,
+                            Value = $"{teacher.Id}"
+                        });
+                }
+                return View(coursesAddUpdateCourseViewModel);
+            }
+            //update course
+            var course = _schoolDbContext
+                .Courses
+                .FirstOrDefault(c => c.Id ==
+                coursesAddUpdateCourseViewModel.CourseId);
+            course.Title = coursesAddUpdateCourseViewModel
+                .Title;
+            course.TeacherId = coursesAddUpdateCourseViewModel
+                .TeacherId;
+            
+            try
+            {
+                _schoolDbContext.SaveChanges();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            //redirect to course list
+            return RedirectToAction("Index", "Courses");
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddCourse(CoursesAddUpdateCourseViewModel
             coursesAddCourseViewModel)
         {
