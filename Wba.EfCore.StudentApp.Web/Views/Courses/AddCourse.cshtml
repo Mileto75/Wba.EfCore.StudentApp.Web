@@ -10,6 +10,9 @@
         <input asp-for="Title" class="form-control">
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
+    <label asp-for="TeacherId"></label>
+    <select asp-for="TeacherId" class="form-control"
+            asp-items="@Model.Teachers"></select>
     <button type="submit" class="btn btn-info">Save</button>
 </form>
 

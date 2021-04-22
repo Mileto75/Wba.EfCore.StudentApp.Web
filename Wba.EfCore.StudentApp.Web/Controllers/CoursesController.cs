@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,22 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         [HttpGet]
         public IActionResult AddCourse()
         {
-            return View();
+            //loads the form
+            //viewModel
+            CoursesAddCourseViewModel coursesAddCourseViewModel
+                = new CoursesAddCourseViewModel();
+            coursesAddCourseViewModel.Teachers 
+                = new List<SelectListItem>();
+            //loop over teachers
+            foreach(var teacher in _schoolDbContext.Teachers.ToList())
+            {
+                //add teachers to list
+                coursesAddCourseViewModel.Teachers
+                    .Add(new SelectListItem 
+                    {Text=$"{teacher.Firstname} {teacher.Lastname}"
+                    ,Value=$"{teacher.Id}"});
+            }
+            return View(coursesAddCourseViewModel);
         }
 
         [HttpPost]
@@ -54,11 +70,26 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         {
             if(!ModelState.IsValid)
             {
+                coursesAddCourseViewModel.Teachers = new List<SelectListItem>();
+                //loop over teachers
+                foreach (var teacher in _schoolDbContext.Teachers.ToList())
+                {
+                    //add teachers to list
+                    coursesAddCourseViewModel.Teachers
+                        .Add(new SelectListItem
+                        {
+                            Text = $"{teacher.Firstname} {teacher.Lastname}"
+                        ,
+                            Value = $"{teacher.Id}"
+                        });
+                }
                 return View(coursesAddCourseViewModel);
             }
             //save new course
             Course newCourse = new Course();
             newCourse.Title = coursesAddCourseViewModel.Title;
+            //teacher
+            newCourse.TeacherId = coursesAddCourseViewModel.TeacherId;
             _schoolDbContext.Courses.Add(newCourse);
             try 
             {
