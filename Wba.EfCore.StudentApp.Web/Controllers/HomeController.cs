@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Wba.EfCore.StudentApp.Domain.Entities;
 using Wba.EfCore.StudentApp.Web.Data;
 using Wba.EfCore.StudentApp.Web.Models;
 
@@ -17,7 +18,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         //constructor injection
         public HomeController(SchoolDbContext schoolDbContext)
         {
-            //injection
+            //injection 
             _schoolDbContext = schoolDbContext;
         }
 
@@ -25,19 +26,20 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         {
             var courses = _schoolDbContext
                 .Courses
-                .Include(c => c.Teacher)//join de tabel teacher
-                .Include(c => c.Students)//join table studentCourses
-                .ThenInclude(s => s.Student)//join tabel students
                 .ToList();
-            foreach(var course in courses)
-            {
-                Console.WriteLine(course.Title);
-                foreach(var student in course.Students)
-                {
-                    Console.WriteLine($"{student.Student.Firstname}" +
-                        $" {student.Student.Lastname}");
-                }
-            }
+            var course = _schoolDbContext
+                .Courses
+                .Include(c => c.Teacher)
+                .SingleOrDefault(c => c.Id == 1);
+
+            var student = _schoolDbContext
+                .Students
+                .Include(s => s.Courses)
+                .ThenInclude(c => c.Course)
+                .ThenInclude(c => c.Teacher);
+                
+            Console.WriteLine(student);
+
             return View();
         }
 

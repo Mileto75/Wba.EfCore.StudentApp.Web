@@ -1,0 +1,26 @@
+﻿@model CoursesIndexViewModel
+<h2>Courses</h2>
+<table class="table table-condensed table-hover">
+    <tr>
+        <th>Title</th>
+        <th>Name</th>
+        <th colspan="3">Action</th>
+    </tr>
+    @foreach(var course in Model.Courses)
+      {
+        <tr>
+            <td>@course.Title</td>
+            <td>@course.TeacherName</td>
+            <td>
+                <a asp-controller="Courses"
+                   asp-action="ShowCourseInfo"
+                   asp-route-Id="@course.Id"
+                   class="btn btn-info">Info</a>
+                <a asp-controller="Courses"
+                   asp-action="ConfirmDelete"
+                   asp-route-Id="@course.Id"
+                   class="btn btn-info">Delete</a>
+            </td>
+        </tr>
+      }
+</table>
