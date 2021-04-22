@@ -1,7 +1,15 @@
-﻿
-@{
-    ViewData["Title"] = "AddCourse";
-}
+﻿@model CoursesAddCourseViewModel
 
 <h2>AddCourse</h2>
+<div asp-validation-summary="ModelOnly"></div>
+<form asp-controller="Courses"
+      asp-action="AddCourse"
+      method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control">
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-info">Save</button>
+</form>
 

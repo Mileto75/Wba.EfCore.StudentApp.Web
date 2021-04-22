@@ -34,7 +34,8 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
                 (
                     new CoursesShowCourseInfoViewModel
                     { Id = course.Id,Title=course.Title,
-                    TeacherName = $"{course.Teacher.Firstname} {course.Teacher.Lastname}"}
+                    TeacherName = 
+                    $"{course?.Teacher?.Firstname} {course?.Teacher?.Lastname}"}
                 );
             }
             return View(coursesIndexViewModel);
@@ -43,15 +44,23 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         [HttpGet]
         public IActionResult AddCourse()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddCourse(CoursesAddCourseViewModel
+            coursesAddCourseViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(coursesAddCourseViewModel);
+            }
+            //save new course
             Course newCourse = new Course();
-            newCourse.Title = "CIA";
-            newCourse.TeacherId = 1;
-            //add to context
-            _schoolDbContext
-                .Courses
-                .Add(newCourse);
-            //editeren
-            try
+            newCourse.Title = coursesAddCourseViewModel.Title;
+            _schoolDbContext.Courses.Add(newCourse);
+            try 
             {
                 _schoolDbContext.SaveChanges();
             }
@@ -59,8 +68,11 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             {
                 Console.WriteLine(e.Message);
             }
-            return View();
+            
+            //redirect to index
+            return RedirectToAction("Index","Courses");
         }
+
         [HttpGet]
         public IActionResult EditCourse(long Id)
         {
@@ -123,5 +135,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             }
             return RedirectToAction("Index", "Courses");
         }
+
+       
     }
 }
