@@ -1,9 +1,8 @@
 ﻿@model CoursesAddUpdateCourseViewModel
-
-<h2>AddCourse</h2>
+<h2>Update</h2>
 <div asp-validation-summary="ModelOnly"></div>
 <form asp-controller="Courses"
-      asp-action="AddCourse"
+      asp-action="Update"
       method="post">
     <div class="form-group">
         <label asp-for="Title"></label>
@@ -13,6 +12,7 @@
     <label asp-for="TeacherId"></label>
     <select asp-for="TeacherId" class="form-control"
             asp-items="@Model.Teachers"></select>
+    <input type="hidden" value="@Model.CourseId" />
     <button type="submit" class="btn btn-info">Save</button>
 </form>
 

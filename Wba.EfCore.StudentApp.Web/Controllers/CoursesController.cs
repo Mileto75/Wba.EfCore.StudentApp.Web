@@ -47,8 +47,8 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         {
             //loads the form
             //viewModel
-            CoursesAddCourseViewModel coursesAddCourseViewModel
-                = new CoursesAddCourseViewModel();
+            CoursesAddUpdateCourseViewModel coursesAddCourseViewModel
+                = new CoursesAddUpdateCourseViewModel();
             coursesAddCourseViewModel.Teachers 
                 = new List<SelectListItem>();
             //loop over teachers
@@ -62,17 +62,50 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             }
             return View(coursesAddCourseViewModel);
         }
+        [HttpGet]
+        public IActionResult Update(long Id)
+        {
+            //get the course to update
+            var course = _schoolDbContext
+                .Courses
+                .FirstOrDefault(c => c.Id == Id);
+            //declare viewModel
+            CoursesAddUpdateCourseViewModel
+                coursesAddUpdateCourseViewModel = 
+                new CoursesAddUpdateCourseViewModel();
+            coursesAddUpdateCourseViewModel
+                .Title = course?.Title;
+            coursesAddUpdateCourseViewModel
+                .TeacherId = course?.TeacherId;
+            coursesAddUpdateCourseViewModel
+                .CourseId = course.Id;
+            coursesAddUpdateCourseViewModel
+                .Teachers = new List<SelectListItem>();
+            foreach(var teacher in _schoolDbContext.Teachers.ToList())
+            {
+                coursesAddUpdateCourseViewModel
+                    .Teachers.Add(new SelectListItem
+                    {
+                        Text = $"{teacher.Firstname} {teacher.Lastname}"
+                    ,
+                        Value = $"{teacher.Id}"
+                    });
+            }
+            return View(coursesAddUpdateCourseViewModel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddCourse(CoursesAddCourseViewModel
+        public IActionResult AddCourse(CoursesAddUpdateCourseViewModel
             coursesAddCourseViewModel)
         {
             if(!ModelState.IsValid)
             {
-                coursesAddCourseViewModel.Teachers = new List<SelectListItem>();
+                coursesAddCourseViewModel.Teachers =
+                    new List<SelectListItem>();
                 //loop over teachers
-                foreach (var teacher in _schoolDbContext.Teachers.ToList())
+                foreach (var teacher in
+                    _schoolDbContext.Teachers.ToList())
                 {
                     //add teachers to list
                     coursesAddCourseViewModel.Teachers

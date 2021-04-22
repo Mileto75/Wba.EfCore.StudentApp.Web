@@ -19,7 +19,11 @@
                 <a asp-controller="Courses"
                    asp-action="ConfirmDelete"
                    asp-route-Id="@course.Id"
-                   class="btn btn-info">Delete</a>
+                   class="btn btn-danger">Delete</a>
+                <a asp-controller="Courses"
+                   asp-action="Update"
+                   asp-route-Id="@course.Id"
+                   class="btn btn-info">Update</a>
             </td>
         </tr>
       }
