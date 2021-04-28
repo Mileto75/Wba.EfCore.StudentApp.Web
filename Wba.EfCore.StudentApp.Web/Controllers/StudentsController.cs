@@ -81,9 +81,25 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
                 = new FileStream(filePath, FileMode.Create);
             //copy from viewmodel file
             await studentsAddUpdateViewModel.Image.CopyToAsync(stream);
+            stream.Dispose();
             //store the filename in database
             student.Image = fileName;
-            //add courses
+            //add courses => Many to many relatie
+            //loop over the checkbox list
+            student.Courses = new List<StudentCourses>();
+            foreach (var course in studentsAddUpdateViewModel
+                .Courses
+                .Where(c => c.Selected == true))
+            {
+                //add studentCourses entity
+                //toevoegen aan courses
+                student.Courses.Add
+                (
+                    new StudentCourses { Student = student,
+                    CourseId=course.Id}
+                );
+            }
+
             _schoolDbContext.Students.Add(student);
             await _schoolDbContext.SaveChangesAsync();
             return RedirectToAction("Index", "Students");

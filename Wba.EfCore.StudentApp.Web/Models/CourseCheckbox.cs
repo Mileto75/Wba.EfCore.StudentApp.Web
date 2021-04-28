@@ -7,7 +7,7 @@ namespace Wba.EfCore.StudentApp.Web.Models
 {
     public class CourseCheckbox
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public bool Selected { get; set; }
     }
