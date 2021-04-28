@@ -10,8 +10,8 @@ using Wba.EfCore.StudentApp.Web.Data;
 namespace Wba.EfCore.StudentApp.Web.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20210331134609_AddedSeeding")]
-    partial class AddedSeeding
+    [Migration("20210428113533_AddStudentImage")]
+    partial class AddStudentImage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,6 +53,8 @@ namespace Wba.EfCore.StudentApp.Web.Migrations
                     b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Firstname");
+
+                    b.Property<string>("Image");
 
                     b.Property<string>("Lastname");
 

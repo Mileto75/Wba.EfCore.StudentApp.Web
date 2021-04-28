@@ -52,6 +52,8 @@ namespace Wba.EfCore.StudentApp.Web.Migrations
 
                     b.Property<string>("Firstname");
 
+                    b.Property<string>("Image");
+
                     b.Property<string>("Lastname");
 
                     b.HasKey("Id");
