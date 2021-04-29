@@ -27,5 +27,10 @@ namespace Wba.EfCore.StudentApp.Web.Services
             stream.Dispose();
             return fileName;
         }
+
+        void IFileManagerService.DeleteFile(string filePath)
+        {
+            System.IO.File.Delete(filePath);
+        }
     }
 }
