@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wba.EfCore.StudentApp.Web.Data;
+using Wba.EfCore.StudentApp.Web.Services;
 
 namespace Wba.EfCore.StudentApp.Web
 {
@@ -33,6 +34,9 @@ namespace Wba.EfCore.StudentApp.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //register services
+            services.AddTransient
+                <IFileManagerService, NewFileManagerService>();
             //dependency service configuration/registration of databasecontext
             services.AddDbContext<SchoolDbContext>
                 (options 

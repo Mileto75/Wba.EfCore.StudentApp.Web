@@ -21,13 +21,17 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         private readonly SchoolDbContext _schoolDbContext;
         //hostingenvironment
         private readonly IHostingEnvironment _hostingEnvironment;
+        //inject filemanagerservice class 
+        private readonly IFileManagerService _fileManagerService;
 
         public StudentsController(SchoolDbContext schoolDbContext,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment,
+            IFileManagerService fileManagerService)
         {
             //inject schoolDb
             _schoolDbContext = schoolDbContext;
             _hostingEnvironment = hostingEnvironment;
+            _fileManagerService = fileManagerService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -66,8 +70,6 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         public async Task<IActionResult> Add(StudentsAddUpdateViewModel
             studentsAddUpdateViewModel)
         {
-            FileManagerService fileManagerService
-                = new FileManagerService();
             //save the student
             var student = new Student();
             student.Firstname = studentsAddUpdateViewModel.Firstname;
@@ -75,7 +77,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             
             //store the filename in database
             student.Image = 
-                await fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
+                await _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
                 , _hostingEnvironment.WebRootPath);
             //add courses => Many to many relatie
             //loop over the checkbox list

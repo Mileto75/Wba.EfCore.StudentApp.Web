@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Wba.EfCore.StudentApp.Web.Services
 {
-    public class FileManagerService : IFileManagerService
+    public class NewFileManagerService : IFileManagerService
     {
         public async Task<string> SaveFile(IFormFile file,
             string webRoot)
@@ -26,6 +26,11 @@ namespace Wba.EfCore.StudentApp.Web.Services
             await file.CopyToAsync(stream);
             stream.Dispose();
             return fileName;
+        }
+
+        void IFileManagerService.DeleteFile(string filePath)
+        {
+            System.IO.File.Delete(filePath);
         }
     }
 }
