@@ -69,21 +69,11 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             var student = new Student();
             student.Firstname = studentsAddUpdateViewModel.Firstname;
             student.Lastname = studentsAddUpdateViewModel.Lastname;
-            //image
-            //create the path wwwroot/images/filename.jpg
-            //make a filename
-            var fileName = $"{Guid.NewGuid()}_{studentsAddUpdateViewModel.Image.FileName}";
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath
-                ,"images",fileName
-                );
-            //store on disk
-            FileStream stream
-                = new FileStream(filePath, FileMode.Create);
-            //copy from viewmodel file
-            await studentsAddUpdateViewModel.Image.CopyToAsync(stream);
-            stream.Dispose();
+            
             //store the filename in database
-            student.Image = fileName;
+            student.Image = 
+                _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
+                , _hostingEnvironment.WebRootPath);
             //add courses => Many to many relatie
             //loop over the checkbox list
             student.Courses = new List<StudentCourses>();
