@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Wba.EfCore.StudentApp.Domain.Entities;
 using Wba.EfCore.StudentApp.Web.Data;
 using Wba.EfCore.StudentApp.Web.Models;
+using Wba.EfCore.StudentApp.Web.Services;
 using Wba.EfCore.StudentApp.Web.ViewModels;
 
 namespace Wba.EfCore.StudentApp.Web.Controllers
@@ -65,6 +66,8 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         public async Task<IActionResult> Add(StudentsAddUpdateViewModel
             studentsAddUpdateViewModel)
         {
+            FileManagerService fileManagerService
+                = new FileManagerService();
             //save the student
             var student = new Student();
             student.Firstname = studentsAddUpdateViewModel.Firstname;
@@ -72,7 +75,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             
             //store the filename in database
             student.Image = 
-                _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
+                await fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
                 , _hostingEnvironment.WebRootPath);
             //add courses => Many to many relatie
             //loop over the checkbox list
