@@ -28,9 +28,9 @@ namespace Wba.EfCore.StudentApp.Web.Services
             return fileName;
         }
 
-        void IFileManagerService.DeleteFile(string filePath)
+        void IFileManagerService.DeleteFile(string fileName,string webRoot)
         {
-            System.IO.File.Delete(filePath);
+            System.IO.File.Delete(Path.Combine(webRoot,fileName));
         }
     }
 }

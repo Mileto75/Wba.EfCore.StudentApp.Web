@@ -36,7 +36,7 @@ namespace Wba.EfCore.StudentApp.Web
 
             //register services
             services.AddTransient
-                <IFileManagerService, NewFileManagerService>();
+                <IFileManagerService, FileManagerService>();
             //dependency service configuration/registration of databasecontext
             services.AddDbContext<SchoolDbContext>
                 (options 

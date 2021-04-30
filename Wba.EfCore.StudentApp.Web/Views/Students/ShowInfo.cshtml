@@ -1,0 +1,22 @@
+﻿@model StudentsShowInfoViewModel
+@{
+    ViewData["Title"] = "ShowInfo";
+}
+
+<h2>ShowInfo</h2>
+<div class="container">
+    <div class="panel">
+        <img src="~/images/@Model.Image" width="140"height="140" class="img-responsive" />
+        <div class="panel-title">@Model.Name</div>
+        <div class="panel-body">
+            <b>Courses:</b>
+            @for(int i=0;i<Model.CoursesIds.Count();i++)
+            {
+                <a asp-action="ShowCourseInfo"
+                   asp-controller="Courses"
+                   asp-route-Id="@Model.CoursesIds.ToArray()[i]">@Model.CoursesTitles.ToArray()[i]</a>
+            }
+        </div>
+    </div>
+</div>
+

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,10 +35,28 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             _fileManagerService = fileManagerService;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //show a list of students
-            return View();
+            StudentsIndexViewModel studentsIndexViewModel
+                = new StudentsIndexViewModel();
+            studentsIndexViewModel.Students = new List<StudentsShowInfoViewModel>();
+            foreach(var student in await _schoolDbContext
+                .Students
+                .ToListAsync())
+            {
+                studentsIndexViewModel.Students
+                    .Add
+                    (
+                        new StudentsShowInfoViewModel
+                        {
+                            Id=student.Id,
+                            Name = $"{student.Firstname} {student.Lastname}",
+                            Image = student.Image
+                        }
+                    );
+            }
+            return View(studentsIndexViewModel);
         }
         [HttpGet]
         public async Task<IActionResult> Add()
@@ -67,6 +86,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(StudentsAddUpdateViewModel
             studentsAddUpdateViewModel)
         {
@@ -98,6 +118,49 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             _schoolDbContext.Students.Add(student);
             await _schoolDbContext.SaveChangesAsync();
             return RedirectToAction("Index", "Students");
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmDelete(long id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var student = await _schoolDbContext
+                .Students
+                .FirstOrDefaultAsync(s => s.Id == id);
+            _fileManagerService
+                .DeleteFile(student.Image, _hostingEnvironment.WebRootPath);
+            _schoolDbContext.Students.Remove(student);
+            try
+            {
+                await _schoolDbContext.SaveChangesAsync();
+            }
+            catch(SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return RedirectToAction("Index","Students");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowInfo(long id)
+        {
+            StudentsShowInfoViewModel studentsShowInfoViewModel
+                = new StudentsShowInfoViewModel();
+            var student = await _schoolDbContext
+                .Students
+                .Include(s => s.Courses)
+                .ThenInclude(c =>c.Course)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            studentsShowInfoViewModel.Name = $"{student.Firstname} {student.Lastname}";
+            studentsShowInfoViewModel.Image = student.Image;
+            studentsShowInfoViewModel.CoursesTitles = student.Courses.Select(c => c.Course.Title);
+            studentsShowInfoViewModel.CoursesIds = student.Courses.Select(c => c.Course.Id);
+            return View(studentsShowInfoViewModel);
         }
     }
 }

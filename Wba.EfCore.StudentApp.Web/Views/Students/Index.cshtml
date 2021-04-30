@@ -1,1 +1,28 @@
-﻿
+﻿@model StudentsIndexViewModel 
+<h2>Students</h2>
+<table class="table table-hover table-responsive">
+    <tr>
+        <th>Name</th>
+        <th colspan="3">Action</th>
+    </tr>
+    @foreach(var student in Model.Students)
+    {
+<tr>
+    <td>@student.Name</td>
+    <td>
+        <a asp-controller="Students"
+           asp-action="ShowInfo"
+           asp-route-Id="@student.Id"
+           class="btn btn-info">Info</a>
+        <a asp-controller="Students"
+           asp-action="Edit"
+           asp-route-Id="@student.Id"
+           class="btn btn-info">Edit</a>
+        <a asp-controller="Students"
+            asp-action="ConfirmDelete"
+            asp-route-Id="@student.Id"
+            class="btn btn-info">Delete</a>
+    </td>
+</tr>
+    }
+</table>
