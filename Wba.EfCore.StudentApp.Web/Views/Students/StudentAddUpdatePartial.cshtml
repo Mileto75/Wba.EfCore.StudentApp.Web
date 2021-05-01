@@ -1,0 +1,28 @@
+﻿@model StudentsAddUpdateViewModel
+<div class="form-group">
+    <label asp-for="Firstname"></label>
+    <input asp-for="Firstname" class="form-control">
+    <span asp-validation-for="Firstname" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Lastname"></label>
+    <input asp-for="Lastname" class="form-control">
+    <span asp-validation-for="Lastname" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Image"></label>
+    <input asp-for="Image" class="form-control">
+    <span asp-validation-for="Image" class="text-danger"></span>
+</div>
+@* checkbox *@
+@for (int i = 0; i < Model.Courses.Count; i++)
+{
+    <input asp-for="@Model.Courses[i].Selected" />
+    <label asp-for="@Model.Courses[i].Selected">
+        @Model.Courses[i].Name
+    </label>
+    <input type="hidden" asp-for="@Model.Courses[i].Id" />
+    <input type="hidden" asp-for="@Model.Courses[i].Name" />
+}
+<br />
+<button type="submit" class="btn btn-info">Save</button>

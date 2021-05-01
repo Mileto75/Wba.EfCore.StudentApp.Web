@@ -1,10 +1,11 @@
 ﻿@model StudentsAddUpdateViewModel
-<h2>Add</h2>
+
 <form asp-controller="Students"
-      asp-action="Add"
+      asp-action="Update"
       method="post"
       enctype="multipart/form-data">
+    <div class="form-group">
+        <img class="img-responsive" width="140" height="150" src="~/images/@ViewBag.image" />
+    </div>
     <partial name="StudentAddUpdatePartial" model="@Model" />
 </form>
-
-

@@ -30,7 +30,13 @@ namespace Wba.EfCore.StudentApp.Web.Services
 
         void IFileManagerService.DeleteFile(string fileName,string webRoot)
         {
-            System.IO.File.Delete(Path.Combine(webRoot,fileName));
+            if (fileName == null)
+                fileName = "";
+            string filePath = Path.Combine(webRoot, fileName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
         }
     }
 }

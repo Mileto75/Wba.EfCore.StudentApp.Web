@@ -15,7 +15,7 @@
            asp-route-Id="@student.Id"
            class="btn btn-info">Info</a>
         <a asp-controller="Students"
-           asp-action="Edit"
+           asp-action="Update"
            asp-route-Id="@student.Id"
            class="btn btn-info">Edit</a>
         <a asp-controller="Students"
@@ -26,3 +26,8 @@
 </tr>
     }
 </table>
+<div class="row">
+    <a asp-controller="Students"
+       asp-action="Add"
+       class="btn btn-primary">Add</a>
+</div>

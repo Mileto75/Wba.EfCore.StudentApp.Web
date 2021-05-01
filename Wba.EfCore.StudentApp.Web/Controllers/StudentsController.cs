@@ -90,15 +90,22 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
         public async Task<IActionResult> Add(StudentsAddUpdateViewModel
             studentsAddUpdateViewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(studentsAddUpdateViewModel);
+            }
             //save the student
             var student = new Student();
             student.Firstname = studentsAddUpdateViewModel.Firstname;
             student.Lastname = studentsAddUpdateViewModel.Lastname;
             
             //store the filename in database
-            student.Image = 
+            if(studentsAddUpdateViewModel.Image != null)
+            {
+                student.Image =
                 await _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image
                 , _hostingEnvironment.WebRootPath);
+            }
             //add courses => Many to many relatie
             //loop over the checkbox list
             student.Courses = new List<StudentCourses>();
@@ -116,7 +123,14 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             }
 
             _schoolDbContext.Students.Add(student);
-            await _schoolDbContext.SaveChangesAsync();
+            try
+            {
+                await _schoolDbContext.SaveChangesAsync();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             return RedirectToAction("Index", "Students");
         }
 
@@ -161,6 +175,83 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             studentsShowInfoViewModel.CoursesTitles = student.Courses.Select(c => c.Course.Title);
             studentsShowInfoViewModel.CoursesIds = student.Courses.Select(c => c.Course.Id);
             return View(studentsShowInfoViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(long id)
+        {
+            var student = await _schoolDbContext.Students
+                .Include(s => s.Courses)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            //viewModel
+            StudentsAddUpdateViewModel studentsAddUpdateViewModel
+                = new StudentsAddUpdateViewModel();
+            studentsAddUpdateViewModel.Firstname = student.Firstname;
+            studentsAddUpdateViewModel.Lastname = student.Lastname;
+            //courses
+            studentsAddUpdateViewModel.Courses = new List<CourseCheckbox>();
+            foreach(var course in await _schoolDbContext.Courses.ToListAsync())
+            {
+                //check if student in course to set selected
+                if(student.Courses.Any(c => c.CourseId == course.Id))
+                {
+                    studentsAddUpdateViewModel.Courses.Add
+                    (
+                        new CourseCheckbox { Id = course.Id, Name = course.Title,Selected=true }
+                    );
+                }
+                else
+                {
+                    studentsAddUpdateViewModel.Courses.Add
+                    (
+                        new CourseCheckbox { Id = course.Id, Name = course.Title,Selected=false }
+                    );
+                }
+                
+            }
+            ViewBag.Image = student.Image;
+            return View(studentsAddUpdateViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(StudentsAddUpdateViewModel studentsAddUpdateViewModel)
+        {
+            var student = await _schoolDbContext.Students
+                .Include(s => s.Courses)
+                .FirstOrDefaultAsync(s => s.Id == studentsAddUpdateViewModel.Id);
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Image = student.Image;
+                return View(studentsAddUpdateViewModel);
+            }
+            //update student
+            student.Firstname = studentsAddUpdateViewModel.Firstname;
+            student.Lastname = studentsAddUpdateViewModel.Lastname;
+            if(studentsAddUpdateViewModel.Image != null)
+            {
+                _fileManagerService.DeleteFile(student.Image, _hostingEnvironment.WebRootPath);
+                student.Image = await _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image,
+                    _hostingEnvironment.WebRootPath);
+            }
+            //save courses
+            student.Courses.Clear();
+            foreach(var course in studentsAddUpdateViewModel.Courses.Where(c => c.Selected == true))
+            {
+                student.Courses.Add
+                (
+                    new StudentCourses { Student=student,CourseId=course.Id}
+                );
+            }
+            try
+            {
+                await _schoolDbContext.SaveChangesAsync();
+            }
+            catch(SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return RedirectToAction("Index", "Students");
         }
     }
 }
