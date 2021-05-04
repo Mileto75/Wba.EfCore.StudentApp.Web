@@ -147,7 +147,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
                 .Students
                 .FirstOrDefaultAsync(s => s.Id == id);
             _fileManagerService
-                .DeleteFile(student.Image, _hostingEnvironment.WebRootPath);
+                .DeleteFile(student.Image, $"{_hostingEnvironment.WebRootPath}/images");
             _schoolDbContext.Students.Remove(student);
             try
             {
@@ -230,7 +230,7 @@ namespace Wba.EfCore.StudentApp.Web.Controllers
             student.Lastname = studentsAddUpdateViewModel.Lastname;
             if(studentsAddUpdateViewModel.Image != null)
             {
-                _fileManagerService.DeleteFile(student.Image, _hostingEnvironment.WebRootPath);
+                _fileManagerService.DeleteFile(student.Image, $"{_hostingEnvironment.WebRootPath}/images");
                 student.Image = await _fileManagerService.SaveFile(studentsAddUpdateViewModel.Image,
                     _hostingEnvironment.WebRootPath);
             }
